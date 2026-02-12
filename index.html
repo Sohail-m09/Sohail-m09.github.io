@@ -1559,7 +1559,9 @@
     </footer>
 
     <script>
-        // Tech Information Database
+        // ============================================
+        // TECH INFORMATION DATABASE
+        // ============================================
         const techDatabase = {
             'python': {
                 name: 'Python',
@@ -1696,36 +1698,26 @@
             }
         };
 
-        // Theme Toggle Functionality
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = themeToggle.querySelector('i');
-        const themeText = document.getElementById('themeText');
-        
-        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-        const currentTheme = localStorage.getItem('theme');
-        
-        if (currentTheme === 'light') {
-            document.body.classList.add('light-theme');
-            themeIcon.className = 'fas fa-sun';
-            themeText.textContent = 'Light';
-        } else if (currentTheme === 'dark') {
-            document.body.classList.remove('light-theme');
-            themeIcon.className = 'fas fa-moon';
-            themeText.textContent = 'Dark';
-        } else if (prefersDarkScheme.matches) {
-            document.body.classList.remove('light-theme');
-            themeIcon.className = 'fas fa-moon';
-            themeText.textContent = 'Dark';
-            localStorage.setItem('theme', 'dark');
-        } else {
-            document.body.classList.add('light-theme');
-            themeIcon.className = 'fas fa-sun';
-            themeText.textContent = 'Light';
-            localStorage.setItem('theme', 'light');
-        }
-        
-        themeToggle.addEventListener('click', () => {
-            if (document.body.classList.contains('light-theme')) {
+        // ============================================
+        // THEME TOGGLE FUNCTIONALITY
+        // ============================================
+        (function initTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle.querySelector('i');
+            const themeText = document.getElementById('themeText');
+            
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const currentTheme = localStorage.getItem('theme');
+            
+            if (currentTheme === 'light') {
+                document.body.classList.add('light-theme');
+                themeIcon.className = 'fas fa-sun';
+                themeText.textContent = 'Light';
+            } else if (currentTheme === 'dark') {
+                document.body.classList.remove('light-theme');
+                themeIcon.className = 'fas fa-moon';
+                themeText.textContent = 'Dark';
+            } else if (prefersDarkScheme.matches) {
                 document.body.classList.remove('light-theme');
                 themeIcon.className = 'fas fa-moon';
                 themeText.textContent = 'Dark';
@@ -1736,153 +1728,215 @@
                 themeText.textContent = 'Light';
                 localStorage.setItem('theme', 'light');
             }
-        });
-
-        // Tech Info Modal
-        const techModal = document.getElementById('techModal');
-        const techModalClose = document.getElementById('techModalClose');
-        const techTitle = document.getElementById('techTitle');
-        const techName = document.getElementById('techName');
-        const techIcon = document.getElementById('techIcon');
-        const techLogo = document.getElementById('techLogo');
-        const techDescription = document.getElementById('techDescription');
-        const techFeatures = document.getElementById('techFeatures');
-        const techResources = document.getElementById('techResources');
-
-        function showTechInfo(techKey) {
-            const tech = techDatabase[techKey];
-            if (!tech) return;
             
-            techName.textContent = tech.name;
-            techIcon.className = tech.icon;
-            techLogo.innerHTML = tech.logo;
-            techDescription.textContent = tech.description;
-            
-            techFeatures.innerHTML = '';
-            tech.features.forEach(feature => {
-                const li = document.createElement('li');
-                li.innerHTML = `<i class="fas fa-check"></i> ${feature}`;
-                techFeatures.appendChild(li);
-            });
-            
-            techResources.innerHTML = '';
-            tech.resources.forEach(resource => {
-                const link = document.createElement('a');
-                link.href = resource.url;
-                link.className = 'resource-link';
-                link.target = '_blank';
-                link.textContent = resource.name;
-                techResources.appendChild(link);
-            });
-            
-            techModal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        techModalClose.addEventListener('click', () => {
-            techModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-
-        techModal.addEventListener('click', (e) => {
-            if (e.target === techModal) {
-                techModal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-        // Mobile menu toggle
-        document.querySelector('.mobile-menu').addEventListener('click', function() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        });
-
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', function() {
-                document.querySelector('.nav-links').classList.remove('active');
-            });
-        });
-
-        // Set current year in footer
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
+            themeToggle.addEventListener('click', () => {
+                if (document.body.classList.contains('light-theme')) {
+                    document.body.classList.remove('light-theme');
+                    themeIcon.className = 'fas fa-moon';
+                    themeText.textContent = 'Dark';
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.body.classList.add('light-theme');
+                    themeIcon.className = 'fas fa-sun';
+                    themeText.textContent = 'Light';
+                    localStorage.setItem('theme', 'light');
                 }
             });
-        });
+        })();
 
-        // Fetch GitHub Profile Image - NEW FUNCTIONALITY
-        async function fetchGithubProfileImage() {
-            try {
-                const response = await fetch('https://api.github.com/users/Sohail-m09');
-                if (!response.ok) throw new Error('Failed to fetch GitHub profile');
+        // ============================================
+        // TECH INFO MODAL FUNCTIONALITY
+        // ============================================
+        (function initTechModal() {
+            const techModal = document.getElementById('techModal');
+            const techModalClose = document.getElementById('techModalClose');
+            const techTitle = document.getElementById('techTitle');
+            const techName = document.getElementById('techName');
+            const techIcon = document.getElementById('techIcon');
+            const techLogo = document.getElementById('techLogo');
+            const techDescription = document.getElementById('techDescription');
+            const techFeatures = document.getElementById('techFeatures');
+            const techResources = document.getElementById('techResources');
+
+            window.showTechInfo = function(techKey) {
+                const tech = techDatabase[techKey];
+                if (!tech) return;
                 
-                const data = await response.json();
-                const githubAvatarUrl = data.avatar_url;
+                techName.textContent = tech.name;
+                techIcon.className = tech.icon;
+                techLogo.innerHTML = tech.logo;
+                techDescription.textContent = tech.description;
+                
+                techFeatures.innerHTML = '';
+                tech.features.forEach(feature => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-check"></i> ${feature}`;
+                    techFeatures.appendChild(li);
+                });
+                
+                techResources.innerHTML = '';
+                tech.resources.forEach(resource => {
+                    const link = document.createElement('a');
+                    link.href = resource.url;
+                    link.className = 'resource-link';
+                    link.target = '_blank';
+                    link.textContent = resource.name;
+                    techResources.appendChild(link);
+                });
+                
+                techModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            };
+
+            techModalClose.addEventListener('click', () => {
+                techModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+
+            techModal.addEventListener('click', (e) => {
+                if (e.target === techModal) {
+                    techModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        })();
+
+        // ============================================
+        // MOBILE MENU FUNCTIONALITY
+        // ============================================
+        (function initMobileMenu() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (mobileMenu) {
+                mobileMenu.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+            
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    navLinks.classList.remove('active');
+                });
+            });
+        })();
+
+        // ============================================
+        // SMOOTH SCROLLING
+        // ============================================
+        (function initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if(targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        })();
+
+        // ============================================
+        // GITHUB PROFILE IMAGE - SIMPLE & RELIABLE
+        // ============================================
+        function setGithubProfileImage() {
+            try {
+                // Direct GitHub avatar URL - no API call needed
+                const githubAvatarUrl = 'https://avatars.githubusercontent.com/Sohail-m09';
                 
                 // Update Navigation Profile Image
                 const navProfileContainer = document.getElementById('navProfileContainer');
-                if (navProfileContainer) {
+                if (navProfileContainer && navProfileContainer.tagName !== 'IMG') {
                     const navImg = document.createElement('img');
                     navImg.src = githubAvatarUrl;
                     navImg.alt = 'Sohail Momin';
                     navImg.className = 'nav-profile-img';
-                    navImg.style.width = '45px';
-                    navImg.style.height = '45px';
-                    navImg.style.borderRadius = '50%';
-                    navImg.style.objectFit = 'cover';
-                    navImg.style.border = '3px solid var(--accent)';
+                    navImg.style.cssText = 'width:45px; height:45px; border-radius:50%; object-fit:cover; border:3px solid var(--accent);';
                     
+                    // If image loads successfully, replace the div
                     navImg.onload = function() {
-                        navProfileContainer.parentNode.replaceChild(navImg, navProfileContainer);
+                        if (navProfileContainer.parentNode) {
+                            navProfileContainer.parentNode.replaceChild(navImg, navProfileContainer);
+                        }
                     };
-                    
-                    // If image fails to load, keep the initials
+                    // If image fails to load, keep the initials (no action needed)
                     navImg.onerror = function() {
-                        console.log('Failed to load GitHub profile image, keeping initials');
+                        console.log('Using initials for navigation profile');
                     };
                 }
                 
                 // Update Hero Profile Image
                 const heroProfileContainer = document.getElementById('heroProfileContainer');
-                if (heroProfileContainer) {
+                if (heroProfileContainer && heroProfileContainer.tagName !== 'IMG') {
                     const heroImg = document.createElement('img');
                     heroImg.src = githubAvatarUrl;
                     heroImg.alt = 'Momin Sohail Amir';
                     heroImg.className = 'github-profile-img';
-                    heroImg.style.width = '200px';
-                    heroImg.style.height = '200px';
-                    heroImg.style.borderRadius = '50%';
-                    heroImg.style.objectFit = 'cover';
-                    heroImg.style.border = '4px solid var(--accent)';
+                    heroImg.style.cssText = 'width:200px; height:200px; border-radius:50%; object-fit:cover; border:4px solid var(--accent);';
                     
                     heroImg.onload = function() {
-                        heroProfileContainer.parentNode.replaceChild(heroImg, heroProfileContainer);
+                        if (heroProfileContainer.parentNode) {
+                            heroProfileContainer.parentNode.replaceChild(heroImg, heroProfileContainer);
+                        }
                     };
                     
                     heroImg.onerror = function() {
-                        console.log('Failed to load GitHub profile image, keeping initials');
+                        console.log('Using initials for hero profile');
                     };
                 }
-                
             } catch (error) {
-                console.error('Error fetching GitHub profile:', error);
-                // Keep initials as fallback
+                console.log('Error setting profile image:', error);
+                // Keep initials - no page break
             }
         }
 
-        // Fetch repository data
+        // ============================================
+        // TECH TAGS INITIALIZATION
+        // ============================================
+        function initTechTags() {
+            const techTags = document.querySelectorAll('.tech-tag');
+            techTags.forEach(tag => {
+                tag.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const techKey = this.getAttribute('data-tech');
+                    if (techDatabase[techKey]) {
+                        window.showTechInfo(techKey);
+                    }
+                });
+            });
+        }
+
+        // ============================================
+        // PROJECT COVER IMAGES
+        // ============================================
+        function addProjectCoverImage(projectType, imagePath) {
+            const placeholder = document.getElementById(`${projectType}-cover-placeholder`);
+            const imgElement = document.getElementById(`${projectType}-cover-img`);
+            
+            if (placeholder && imgElement) {
+                const testImage = new Image();
+                testImage.onload = function() {
+                    placeholder.style.display = 'none';
+                    imgElement.src = this.src;
+                    imgElement.style.display = 'block';
+                };
+                testImage.onerror = function() {
+                    console.log(`Using placeholder for: ${projectType}`);
+                    placeholder.style.display = 'flex';
+                };
+                testImage.src = imagePath;
+            }
+        }
+
+        // ============================================
+        // GITHUB REPO STATS
+        // ============================================
         async function fetchRepositoryData(repoName) {
             try {
                 const response = await fetch(`https://api.github.com/repos/Sohail-m09/${repoName}`);
@@ -1897,73 +1951,67 @@
             }
         }
 
-        // Update project stats
         async function updateProjectStats() {
-            const loanRepoData = await fetchRepositoryData('Loan_portfolio_Risk_Analysis');
-            if (loanRepoData) {
-                document.getElementById('loan-stars').textContent = loanRepoData.stargazers_count || 0;
-                document.getElementById('loan-forks').textContent = loanRepoData.forks_count || 0;
-            } else {
-                document.getElementById('loan-stars').textContent = '0';
-                document.getElementById('loan-forks').textContent = '0';
-            }
-            
-            const netflixRepoData = await fetchRepositoryData('Netflix_movie_analysis');
-            if (netflixRepoData) {
-                document.getElementById('netflix-stars').textContent = netflixRepoData.stargazers_count || 0;
-                document.getElementById('netflix-forks').textContent = netflixRepoData.forks_count || 0;
-            } else {
-                document.getElementById('netflix-stars').textContent = '0';
-                document.getElementById('netflix-forks').textContent = '0';
-            }
-        }
-
-        // Add click event to all tech tags
-        document.addEventListener('DOMContentLoaded', () => {
-            const techTags = document.querySelectorAll('.tech-tag');
-            techTags.forEach(tag => {
-                tag.addEventListener('click', () => {
-                    const techKey = tag.getAttribute('data-tech');
-                    showTechInfo(techKey);
-                });
-            });
-        });
-
-        // Function to add project cover images
-        function addProjectCoverImage(projectType, imagePath) {
-            const placeholder = document.getElementById(`${projectType}-cover-placeholder`);
-            const imgElement = document.getElementById(`${projectType}-cover-img`);
-            
-            if (placeholder && imgElement) {
-                const testImage = new Image();
-                testImage.onload = function() {
-                    placeholder.style.display = 'none';
-                    imgElement.src = this.src;
-                    imgElement.style.display = 'block';
-                };
-                testImage.onerror = function() {
-                    console.log(`Failed to load image: ${imagePath}`);
-                    placeholder.style.display = 'flex';
-                };
-                testImage.src = imagePath;
+            try {
+                // Loan portfolio stats
+                const loanRepoData = await fetchRepositoryData('Loan_portfolio_Risk_Analysis');
+                const loanStars = document.getElementById('loan-stars');
+                const loanForks = document.getElementById('loan-forks');
+                if (loanStars) loanStars.textContent = loanRepoData?.stargazers_count || '0';
+                if (loanForks) loanForks.textContent = loanRepoData?.forks_count || '0';
+                
+                // Netflix stats
+                const netflixRepoData = await fetchRepositoryData('Netflix_movie_analysis');
+                const netflixStars = document.getElementById('netflix-stars');
+                const netflixForks = document.getElementById('netflix-forks');
+                if (netflixStars) netflixStars.textContent = netflixRepoData?.stargazers_count || '0';
+                if (netflixForks) netflixForks.textContent = netflixRepoData?.forks_count || '0';
+            } catch (error) {
+                console.log('Error updating project stats:', error);
             }
         }
 
-        // Initialize the application
-        async function init() {
-            // Fetch GitHub profile image
-            await fetchGithubProfileImage();
-            
-            // Update project stats
-            updateProjectStats();
-            
-            // Try to load default project cover images
-            addProjectCoverImage('loan', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
-            addProjectCoverImage('netflix', 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+        // ============================================
+        // SET CURRENT YEAR
+        // ============================================
+        (function setCurrentYear() {
+            const yearElement = document.getElementById('current-year');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear();
+            }
+        })();
+
+        // ============================================
+        // INITIALIZE EVERYTHING
+        // ============================================
+        function init() {
+            try {
+                // Initialize tech tags first
+                initTechTags();
+                
+                // Set GitHub profile image (non-critical)
+                setGithubProfileImage();
+                
+                // Update project stats (non-critical)
+                updateProjectStats();
+                
+                // Load project cover images (non-critical)
+                addProjectCoverImage('loan', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+                addProjectCoverImage('netflix', 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+                
+                console.log('Portfolio initialized successfully!');
+            } catch (error) {
+                console.error('Error during initialization:', error);
+                // Page will still render even if there are errors
+            }
         }
 
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', init);
+        // Run initialization when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init(); // DOM already loaded
+        }
     </script>
 </body>
 </html>
